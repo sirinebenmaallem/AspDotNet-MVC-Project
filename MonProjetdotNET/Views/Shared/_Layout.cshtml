@@ -1,0 +1,126 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MonProjetdotNET</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a asp-controller="Sweetmeat" asp-action="Index" style="color:palevioletred; text-decoration:none"><img src="https://img.icons8.com/external-flaticons-flat-flat-icons/64/undefined/external-donut-coffee-flaticons-flat-flat-icons.png" /> Sirine Sweets</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Sweetmeat" asp-action="Index"><img src="https://img.icons8.com/fluency/48/undefined/cake.png" /> Sweetmeats</a>
+                        </li>
+
+
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("admin"))
+                        {
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <img src="https://img.icons8.com/color/48/undefined/project-management.png" /> Management
+                                </a>
+
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" asp-controller="Parfums" asp-action="Index"><img src="https://img.icons8.com/external-gradient-fill-lafs/64/undefined/external-fruit-flavors-gradient-part-2-gradient-fill-lafs-2.png" /> Parfums</a>
+                                    <a class="dropdown-item" asp-controller="Chefs" asp-action="Index"><img src="https://img.icons8.com/color/48/undefined/chef-cooking.png" /> Chefs</a>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <img src="https://img.icons8.com/color/48/undefined/circled-user-male-skin-type-4--v1.png" />Administration
+                                </a>
+
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Admin" asp-action="CreateRole">Create Role</a>
+
+                                    <a class="dropdown-item" asp-area="" asp-controller="Admin" asp-action="ListRoles">List Roles </a>
+
+                                </div>
+                            </li>
+
+                        }
+
+                    </ul>
+                    
+                    <div class="collapse navbar-collapse position: right" id="collapsibleNavbar" style="padding-top:-50px;" >
+                        
+                        <ul class="nav navbar-nav navbar-right" style="padding-top:10px;"> 
+                           
+                            @*If the user is signed-in display Logout link*@
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <li class="btn btn-outline-warning my-2 my-sm-0" >
+                                    <form class="form-inline my-2 my-lg-0" method="post" asp-controller="Account" asp-action="logout">
+                                        <button type="submit" style="width: auto; " class="nav-link btn btn-link py-0">
+                                            Logout @User.Identity.Name
+                                        </button>
+                                       
+                                    </form>
+                                </li>
+                                
+                            }
+                            else
+                            {
+                        <li class="nav-item ">
+                            <a class="btn  my-2 my-sm-0 text-white " asp-controller="Account" asp-action="Register" style="background-color: #d846fc; ">
+                                Register
+                            </a>
+                            
+                        </li>
+
+                        <li >&nbsp </li>
+
+                       
+                                <li class="nav-item" >
+                                    <a class="btn  my-2 my-sm-0 text-white " asp-controller="Account" asp-action="Login" style="background-color: #d846fc; ">
+                                        Login
+                                    </a>
+                                </li>
+
+
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <form class="form-inline my-2 my-lg-0" asp-controller="Sweetmeat" asp-action="Filter" style="padding-left: 25px;">
+                    <input name="searchString" type="text" class="form-control" placeholder="Search for a sweetmeat..." aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="bi bi-search"></i></button>
+                </form>
+            </div>
+
+            </div>
+
+        </nav>
+    </header>
+    <div class="container-fluid">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
